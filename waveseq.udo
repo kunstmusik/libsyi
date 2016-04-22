@@ -1,3 +1,10 @@
+/* WAVESEQ - UDO for wave sequencing
+
+   originally released 2012.11.02
+
+   http://kunstmusik.com/2012/11/02/waveseq-wave-sequencing-user-defined-opcode-for-csound/
+*/
+
 
 /* waveseq_preposc - utility UDO for waveseq to setup tables to use */
 
