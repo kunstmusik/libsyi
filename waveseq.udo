@@ -1,3 +1,6 @@
+
+/* waveseq_preposc - utility UDO for waveseq to setup tables to use */
+
 opcode waveseq_preposc,kkkkkk,iKKK
 
 iwaveseqtab, koscTableStart, kdurUnit, kosc2fadenum xin
@@ -19,6 +22,7 @@ xout kosc1table, kosc1table_sr, kosc1amp, kosc1fadenum, kosc1repeat, kosc1fadeSt
 
 endop
 
+/* waveseq - oscillator for wave sequencing */
 
 opcode waveseq,a,KiO
 
@@ -151,70 +155,69 @@ if(kosc1active == 1) then
   endif
 
   if(kosc1kcnt >= kosc1repeat) then
-  kosc1active = 0
-  kfadeval = 1
+    kosc1active = 0
+    kfadeval = 1
   endif
 
-  else
+else
   a1 = 0
-  endif
+endif
 
-  if(kosc2active == 1) then
+if(kosc2active == 1) then
 
   if(kosc2table_sr == 0) then
 
-  a2 tablexkt kosc2index, kosc2table, 0, 4, 1, 0, 1
-  kosc2index = kosc2index + kincr
+    a2 tablexkt kosc2index, kosc2table, 0, 4, 1, 0, 1
+    kosc2index = kosc2index + kincr
 
-  if(kosc2index > 1.0) then
-  kosc2index = kosc2index - 1.0
-  endif
+    if(kosc2index > 1.0) then
+      kosc2index = kosc2index - 1.0
+    endif
   else 
-  if(kosc2table_sr > 0) then
-  a2 tablexkt kosc2index, kosc2table, 0, 4, 0, 0, 0
-  else
-  a2 tablexkt kosc2index, kosc2table, 0, 4, 0, 0, 1
-  endif
+    if(kosc2table_sr > 0) then
+      a2 tablexkt kosc2index, kosc2table, 0, 4, 0, 0, 0
+    else
+      a2 tablexkt kosc2index, kosc2table, 0, 4, 0, 0, 1
+    endif
 
-kosc2index = kosc2index + ksmps * (abs(kosc2table_sr) / sr )
+    kosc2index = kosc2index + ksmps * (abs(kosc2table_sr) / sr )
   endif
 
 
   kosc2kcnt = kosc2kcnt + 1
 
-
   if(kosc2kcnt == kosc2fadeStart) then
 
-  kosc1active = 1
-  kosc1kcnt = 0
+    kosc1active = 1
+    kosc1kcnt = 0
 
-  $INCR_WAVEINDEX
+    $INCR_WAVEINDEX
 
-  ktabStart = iSubTableSize * kwaveindex + ioscTableStart
+    ktabStart = iSubTableSize * kwaveindex + ioscTableStart
 
-  kosc1table, kosc1table_sr, kosc1amp, kosc1fadenum, \
-    kosc1repeat, kosc1fadeStart waveseq_preposc iwaveseqtab, ktabStart, kdurUnit, kosc2fadenum
-    kosc1index = 0
-    endif
+    kosc1table, kosc1table_sr, kosc1amp, kosc1fadenum, \
+      kosc1repeat, kosc1fadeStart waveseq_preposc iwaveseqtab, ktabStart, kdurUnit, kosc2fadenum
+      kosc1index = 0
+  endif
 
   if(kosc2kcnt >= kosc2fadeStart) then
-kfadeval = 1 - ((kosc2kcnt - kosc2fadeStart) / (kosc2fadenum * kdurUnit))
+    kfadeval = 1 - ((kosc2kcnt - kosc2fadeStart) / (kosc2fadenum * kdurUnit))
   endif
 
   if(kosc2kcnt >= kosc2repeat) then
-  kosc2active = 0
-  kfadeval = 0
+    kosc2active = 0
+    kfadeval = 0
   endif
 
-  else
-
+else
   a2 = 0
-  endif
+endif
 
-  aout sum a1 * kosc1amp * (1 - kfadeval), a2 * kosc2amp * kfadeval
+aout sum a1 * kosc1amp * (1 - kfadeval), a2 * kosc2amp * kfadeval
 
-  xout aout
+xout aout
 
 #undef INCR_WAVEINDEX
 
-  endop
+endop
+
