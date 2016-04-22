@@ -9,7 +9,7 @@ ksmps	=	64
 nchnls	=	2
 0dbfs	=	1
 
-#include "../filters.inc"
+#include "../tdf2.udo"
 
 instr 1	
 
