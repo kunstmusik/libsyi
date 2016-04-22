@@ -1,4 +1,6 @@
-# libsyi - Library of Csound UDO code by Steven Yi
+# libsyi - Library of Csound UDO code 
+
+by Steven Yi
 
 ## Files
 
