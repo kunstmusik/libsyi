@@ -6,7 +6,7 @@ ksmps	=	64
 nchnls	=	2
 0dbfs	=	1
 
-#include "../gatesig.udo"
+#include "../unirect.udo"
 #include "../adsr140.udo"
 
 instr 1	
@@ -16,7 +16,7 @@ iamp = 0.25
 
 kval = linseg(0.8, p3, 0.1)
 kfreq = linseg(4, p3 * .5, 8, p3 * .5, 2)
-agate = gatesig(kfreq, kval)
+agate = unirect(kfreq, kval)
 
 aretrig init 0
 

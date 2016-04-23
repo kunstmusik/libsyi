@@ -1,7 +1,7 @@
-/* gatesig - generates a unipolar rectangular signal
- * suitable for use as an audio-rate gate signal
+/* unirect - generates a unipolar rectangular signal
+ * suitable for use as an audio-rate periodic gate signal
  *
- * aout gatesig kfreq, kduty
+ * aout unirect kfreq, kduty
  *
  * OUTPUT
  *   aout - gate signal (1 or 0)
@@ -14,7 +14,7 @@
  * Date: 2016.04.23
  */
 
-opcode gatesig, a, kk
+opcode unirect, a, kk
 
 kfreq, kduty xin
 
@@ -41,3 +41,4 @@ od
 xout aout
 
 endop
+
