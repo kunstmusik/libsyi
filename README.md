@@ -9,4 +9,4 @@ by Steven Yi
 * adsr140.udo - Gated, Retriggerable envelope generator based on Doepfer A-140 module
 * ringmod.udo - Implementation of Julian Parker's digital model of a Ring Modulator
 * unirect.udo - Generates a unipolar rectangular signal suitable for use as an audio-rate gate signal
-
+* audaciouseq.udo - Implementation of a 10-band EQ filter based on code from Audacious Media Player
