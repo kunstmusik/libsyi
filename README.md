@@ -12,3 +12,4 @@ by Steven Yi
 * audaciouseq.udo - Implementation of a 10-band EQ filter based on code from Audacious Media Player
 * solina.udo - Chorus effect based on chorus module of Solina String Ensemble 
 * zdf\_svf.udo - Zero Delay State Variable Filter 
+* zdf.udo - Zero Delay Feedback Filters (zdf\_1pole...)
