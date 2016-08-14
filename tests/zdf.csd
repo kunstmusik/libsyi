@@ -121,6 +121,43 @@ outc(aout, aout)
 
 	endin
 
+	instr 5	 
+prints "Testing zdf_ladder...\n"
+
+iamp = ampdbfs(-12) 
+ipch = cps2pch(p4, 12)
+
+asig = vco2(iamp, ipch) 
+
+kcut = expon(ipch * 8, p3, ipch * 2)
+
+aout = zdf_ladder(asig, kcut, 1.0)
+
+aout = limit(aout, -1.0, 1.0)
+
+outc(aout, aout)
+
+	endin
+
+
+	instr 6	 
+prints "Testing moogladder...\n"
+
+iamp = ampdbfs(-12) 
+ipch = cps2pch(p4, 12)
+
+asig = vco2(iamp, ipch) 
+
+kcut = expon(ipch * 8, p3, ipch * 2)
+
+aout = moogladder(asig, kcut, 0.9)
+
+aout = limit(aout, -1.0, 1.0)
+
+outc(aout, aout)
+
+	endin
+
 
 </CsInstruments>
 
@@ -134,6 +171,20 @@ i2 40 8 1 ; zdf_2pole band-pass
 i3 50 8 1 ; zdf_2pole_notch notch
 
 i4 60 8 1 ; zdf_allpas_1pole
+
+i5 70 0.25 8.00 ; zdf_ladder
+i5 + 0.25 8.02 
+i5 + 0.25 8.03 
+i5 + 0.25 8.05 
+i5 + 0.25 8.07 
+i5 + 0.25 8.05 
+i5 + 0.25 8.03 
+i5 + 0.25 8.02 
+i5 + 1 8.00 
+i5 . 4 7.00 
+
+i5 80 2 8.00
+i6 82 2 8.00
 
 </CsScore>
 

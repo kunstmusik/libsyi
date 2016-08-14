@@ -315,6 +315,195 @@ opcode zdf_2pole_notch,aaaa,aaa
 
 endop
 
+;; moog ladder
+
+opcode zdf_ladder, a, akk
+
+  ain, kcf, kres     xin
+  aout init 0
+
+  kR = limit(1 - kres, 0.025, 1)
+
+  kQ = 1 / (2 * kR) 
+
+  kwd = 2 * $M_PI * kcf
+  iT  = 1/sr 
+  kwa = (2/iT) * tan(kwd * iT/2) 
+  kg  = kwa * iT/2 
+
+  kk = 4.0*(kQ - 0.707)/(25.0 - 0.707)
+
+  kg_2 = kg * kg
+  kg_3 = kg_2 * kg
+
+  ; big combined value
+  ; for overall filter
+  kG  = kg_2 * kg_2  
+  ; for individual 1-poles
+  kG_pole = kg/(1.0 + kg)
+
+  ;; state for each 1-pole's integrator 
+  kz1 init 0
+  kz2 init 0
+  kz3 init 0
+  kz4 init 0
+
+  kindx = 0
+  while kindx < ksmps do
+    ;; processing
+    kin = ain[kindx]
+
+    kS = kg_3 * kz1 + kg_2 * kz2 + kg * kz3 + kz4
+    ku = (kin - kk *  kS) / (1 + kk * kG)
+
+    ;; 1st stage
+    kv = (ku - kz1) * kG_pole 
+    klp = kv + kz1
+    kz1 = klp + kv
+
+    ;; 2nd stage
+    kv = (klp - kz2) * kG_pole 
+    klp = kv + kz2
+    kz2 = klp + kv
+
+    ;; 3rd stage
+    kv = (klp - kz3) * kG_pole 
+    klp = kv + kz3
+    kz3 = klp + kv
+
+    ;; 4th stage
+    kv = (klp - kz4) * kG_pole 
+    klp = kv + kz4
+    kz4 = klp + kv
+
+    aout[kindx] = klp
+
+    kindx += 1
+  od
+
+  xout aout
+endop
+
+
+opcode zdf_ladder, a, aaa
+
+  ain, acf, ares     xin
+  aout init 0
+
+  iT  = 1/sr 
+
+  ;; state for each 1-pole's integrator 
+  kz1 init 0
+  kz2 init 0
+  kz3 init 0
+  kz4 init 0
+
+  kindx = 0
+  while kindx < ksmps do
+
+    kR = limit(1 - ares[kindx], 0.025, 1)
+
+    kQ = 1 / (2 * kR) 
+
+    kwd = 2 * $M_PI * acf[kindx]
+    kwa = (2/iT) * tan(kwd * iT/2) 
+    kg  = kwa * iT/2 
+
+    kk = 4.0*(kQ - 0.707)/(25.0 - 0.707)
+
+    kg_2 = kg * kg
+    kg_3 = kg_2 * kg
+
+    ; big combined value
+    ; for overall filter
+    kG  = kg_2 * kg_2  
+    ; for individual 1-poles
+    kG_pole = kg/(1.0 + kg)
+
+    ;; processing
+    kin = ain[kindx]
+
+    kS = kg_3 * kz1 + kg_2 * kz2 + kg * kz3 + kz4
+    ku = (kin - kk *  kS) / (1 + kk * kG)
+
+    ;; 1st stage
+    kv = (ku - kz1) * kG_pole 
+    klp = kv + kz1
+    kz1 = klp + kv
+
+    ;; 2nd stage
+    kv = (klp - kz2) * kG_pole 
+    klp = kv + kz2
+    kz2 = klp + kv
+
+    ;; 3rd stage
+    kv = (klp - kz3) * kG_pole 
+    klp = kv + kz3
+    kz3 = klp + kv
+
+    ;; 4th stage
+    kv = (klp - kz4) * kG_pole 
+    klp = kv + kz4
+    kz4 = klp + kv
+
+    aout[kindx] = klp
+
+    kindx += 1
+  od
+
+  xout aout
+endop
+
+;; 4-pole
+
+opcode zdf_4pole, aaaaaa, akk
+  ain, kcf, kres xin
+
+  alp2, abp2, ahp2 zdf_2pole ain, kcf, kres
+
+  abp4 init 0
+  abl4 init 0
+  alp4 init 0
+
+  xout alp2, abp2, ahp2, alp4, abl4, abp4
+endop
+
+opcode zdf_4pole, aaaaaa, aaa
+  ain, acf, ares xin
+
+  alp2, abp2, ahp2 zdf_2pole ain, acf, ares
+  abp4 init 0
+  abl4 init 0
+  alp4 init 0
+
+  xout alp2, abp2, ahp2, alp4, abl4, abp4
+endop
+
+
+opcode zdf_4pole_hp, aaaaaa, akk
+  ain, kcf, kres xin
+
+  alp2, abp2, ahp2 zdf_2pole ain, kcf, kres
+
+  ahp4 init 0
+  abh4 init 0
+  abp4 init 0
+
+  xout alp2, abp2, ahp2, abp4, abh4, ahp4
+endop
+
+opcode zdf_4pole_hp, aaaaaa, aaa
+  ain, acf, ares xin
+
+  alp2, abp2, ahp2 zdf_2pole ain, acf, ares
+
+  ahp4 init 0
+  abh4 init 0
+  abp4 init 0
+
+  xout alp2, abp2, ahp2, abp4, abh4, ahp4
+endop
+
 ;; TODO - implement
 opcode zdf_peak_eq, a, akkk
   ain, kcf, kres, kdB xin
