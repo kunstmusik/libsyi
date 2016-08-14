@@ -90,6 +90,38 @@ outc(aout, aout)
 
 	endin
 
+	instr 4	 
+prints "Testing zdf_allpass_1pole as phaser...\n"
+
+iamp = ampdbfs(-12) 
+ipch = cps2pch(8.00, 12)
+
+adry = vco2(1, ipch) 
+adry += vco2(1, cps2pch(8.03, 12)) 
+adry += vco2(1, cps2pch(7.07, 12)) 
+adry += vco2(1, cps2pch(6.00, 12), 0) 
+adry *= 0.25 * iamp
+
+adry, ahp, abp zdf_2pole adry, 6000, 0.25 
+
+;; simple phaser
+kcut = (lfo(0.75, 0.5, 0) + 1) * 3000
+
+awet zdf_allpass_1pole adry, kcut
+awet zdf_allpass_1pole awet, kcut
+awet zdf_allpass_1pole awet, kcut
+
+kmix = lfo(0.1, 0.75, 0) + 0.5 
+
+aout = ntrpol(awet, adry, kmix) 
+
+aout = limit(aout, -1.0, 1.0)
+
+outc(aout, aout)
+
+	endin
+
+
 </CsInstruments>
 
 <CsScore>
@@ -100,6 +132,8 @@ i2 20 8 0 ; zdf_2pole low-pass
 i2 30 8 1 ; zdf_2pole high-pass 
 i2 40 8 1 ; zdf_2pole band-pass 
 i3 50 8 1 ; zdf_2pole_notch notch
+
+i4 60 8 1 ; zdf_allpas_1pole
 
 </CsScore>
 

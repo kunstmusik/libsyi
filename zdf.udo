@@ -102,6 +102,26 @@ opcode zdf_1pole, aa, aa
   xout alp, ahp
 endop
 
+;; 1-pole allpass filter
+;; takes in an a-rate signal and corner frequency where input
+;; phase is shifted -90 degrees
+opcode zdf_allpass_1pole, a, ak
+  ain, kcf xin
+  alp, ahp zdf_1pole ain, kcf
+  aout = alp - ahp
+  xout aout
+endop
+
+
+;; 1-pole allpass filter
+;; takes in an a-rate signal and corner frequency where input
+;; phase is shifted -90 degrees
+opcode zdf_allpass_1pole, a, aa
+  ain, acf xin
+  alp, ahp zdf_1pole ain, acf
+  aout = alp - ahp
+  xout aout
+endop
 
 
 ;; 2-pole (12dB) lowpass/highpass/bandpass filter
@@ -295,3 +315,27 @@ opcode zdf_2pole_notch,aaaa,aaa
 
 endop
 
+;; TODO - implement
+opcode zdf_peak_eq, a, akkk
+  ain, kcf, kres, kdB xin
+
+  aout init 0
+
+  xout aout
+endop
+
+opcode zdf_high_shelf_eq, a, akk
+  ain, kcf, kdB xin
+
+  aout init 0
+
+  xout aout
+endop
+
+opcode zdf_low_shelf_eq, a, akk
+  ain, kcf, kdB xin
+
+  aout init 0
+
+  xout aout
+endop
