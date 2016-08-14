@@ -14,6 +14,9 @@
 ;
 ; UDO versions by Steven Yi (2016.xx.xx)
 
+
+;; 1-pole (6dB) lowpass/highpass filter
+;; takes in a a-rate signal and cutoff value in frequency
 opcode zdf_1pole, aa, ak
   ain, kcf  xin
 
@@ -55,6 +58,8 @@ opcode zdf_1pole, aa, ak
 endop
 
 
+;; 1-pole (6dB) lowpass/highpass filter
+;; takes in a a-rate signal and cutoff value in frequency
 opcode zdf_1pole, aa, aa
   ain, acf  xin
 
@@ -96,3 +101,197 @@ opcode zdf_1pole, aa, aa
 
   xout alp, ahp
 endop
+
+
+
+;; 2-pole (12dB) lowpass/highpass/bandpass filter
+;; takes in a a-rate signal, cutoff value in frequency, and
+;; Q factor for resonance
+opcode zdf_2pole,aaa,aKK
+
+  ain, kcf, kQ     xin
+
+  ; pre-warp the cutoff- these are bilinear-transform filters
+  kwd = 2 * $M_PI * kcf
+  iT  = 1/sr 
+  kwa = (2/iT) * tan(kwd * iT/2) 
+  kG  = kwa * iT/2 
+  kR  = 1 / (2 * kQ)
+
+  ;; output signals
+  alp init 0
+  ahp init 0
+  abp init 0
+
+  ;; state for integrators
+  kz1 init 0
+  kz2 init 0
+
+  ;;
+  kindx = 0
+  while kindx < ksmps do
+    khp = (ain[kindx] - (2 * kR + kG) * kz1 - kz2) / (1 + (2 * kR * kG) + (kG * kG))
+    kbp = kG * khp + kz1
+    klp = kG * kbp + kz2
+
+    ; z1 register update
+    kz1 = kG * khp + kbp  
+    kz2 = kG * kbp + klp  
+
+    alp[kindx] = klp
+    ahp[kindx] = khp
+    abp[kindx] = kbp
+    kindx += 1
+  od
+
+  xout alp, abp, ahp
+
+endop
+
+
+;; 2-pole (12dB) lowpass/highpass/bandpass filter
+;; takes in a a-rate signal, cutoff value in frequency, and
+;; Q factor for resonance
+opcode zdf_2pole,aaa,aaa
+
+  ain, acf, aQ     xin
+
+  iT  = 1/sr 
+
+  ;; output signals
+  alp init 0
+  ahp init 0
+  abp init 0
+
+  ;; state for integrators
+  kz1 init 0
+  kz2 init 0
+
+  ;;
+  kindx = 0
+  while kindx < ksmps do
+
+    ; pre-warp the cutoff- these are bilinear-transform filters
+    kwd = 2 * $M_PI * acf[kindx]
+    kwa = (2/iT) * tan(kwd * iT/2) 
+    kG  = kwa * iT/2 
+
+    kR = 1 / (2 * aQ[kindx]) 
+
+    khp = (ain[kindx] - (2 * kR + kG) * kz1 - kz2) / (1 + (2 * kR * kG) + (kG * kG))
+    kbp = kG * khp + kz1
+    klp = kG * kbp + kz2
+
+    ; z1 register update
+    kz1 = kG * khp + kbp  
+    kz2 = kG * kbp + klp 
+
+    alp[kindx] = klp
+    ahp[kindx] = khp
+    abp[kindx] = kbp
+    kindx += 1
+  od
+
+  xout alp, abp, ahp
+
+endop
+
+;; 2-pole (12dB) lowpass/highpass/bandpass/notch filter
+;; takes in a a-rate signal, cutoff value in frequency, and
+;; Q factor for resonance
+opcode zdf_2pole_notch,aaaa,aKK
+
+  ain, kcf, kQ     xin
+
+  ; pre-warp the cutoff- these are bilinear-transform filters
+  kwd = 2 * $M_PI * kcf
+  iT  = 1/sr 
+  kwa = (2/iT) * tan(kwd * iT/2) 
+  kG  = kwa * iT/2 
+  kR  = 1 / (2 * kQ)
+
+  ;; output signals
+  alp init 0
+  ahp init 0
+  abp init 0
+  anotch init 0
+
+  ;; state for integrators
+  kz1 init 0
+  kz2 init 0
+
+  ;;
+  kindx = 0
+  while kindx < ksmps do
+    kin = ain[kindx]
+    khp = (kin - (2 * kR + kG) * kz1 - kz2) / (1 + (2 * kR * kG) + (kG * kG))
+    kbp = kG * khp + kz1
+    klp = kG * kbp + kz2
+    knotch = kin - (2 * kR * kbp)
+
+    ; z1 register update
+    kz1 = kG * khp + kbp  
+    kz2 = kG * kbp + klp  
+
+    alp[kindx] = klp
+    ahp[kindx] = khp
+    abp[kindx] = kbp
+    anotch[kindx] = knotch
+    kindx += 1
+  od
+
+  xout alp, abp, ahp, anotch
+
+endop
+
+;; 2-pole (12dB) lowpass/highpass/bandpass/notch filter
+;; takes in a a-rate signal, cutoff value in frequency, and
+;; Q factor for resonance
+opcode zdf_2pole_notch,aaaa,aaa
+
+  ain, acf, aQ     xin
+
+  iT  = 1/sr 
+
+  ;; output signals
+  alp init 0
+  ahp init 0
+  abp init 0
+  anotch init 0
+
+  ;; state for integrators
+  kz1 init 0
+  kz2 init 0
+
+  ;;
+  kindx = 0
+  while kindx < ksmps do
+
+    ; pre-warp the cutoff- these are bilinear-transform filters
+    kwd = 2 * $M_PI * acf[kindx]
+    kwa = (2/iT) * tan(kwd * iT/2) 
+    kG  = kwa * iT/2 
+
+    kR = 1 / (2 * aQ[kindx])
+
+    kin = ain[kindx]
+    khp = (kin - (2 * kR + kG) * kz1 - kz2) / (1 + (2 * kR * kG) + (kG * kG))
+    kbp = kG * khp + kz1
+    klp = kG * kbp + kz2
+    knotch = kin - (2 * kR * kbp)
+
+    ; z1 register update
+    kz1 = kG * khp + kbp  
+    kz2 = kG * kbp + klp 
+
+    alp[kindx] = klp
+    ahp[kindx] = khp
+    abp[kindx] = kbp
+    anotch[kindx] = knotch
+    kindx += 1
+  od
+
+  xout alp, abp, ahp, anotch
+
+endop
+
