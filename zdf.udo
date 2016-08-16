@@ -516,7 +516,12 @@ endop
 opcode zdf_high_shelf_eq, a, akk
   ain, kcf, kdB xin
 
-  aout init 0
+  ;; TODO - convert db to K, check if reusing zdf_1pole is sufficient
+  kK init 0
+
+  alp, ahp zdf_1pole ain, kcf
+
+  aout = ain + kK * ahp
 
   xout aout
 endop
@@ -524,7 +529,12 @@ endop
 opcode zdf_low_shelf_eq, a, akk
   ain, kcf, kdB xin
 
-  aout init 0
+  ;; TODO - convert db to K, check if reusing zdf_1pole is sufficient
+  kK init 0
+
+  alp, ahp zdf_1pole ain, kcf
+
+  aout = ain + kK * alp
 
   xout aout
 endop
