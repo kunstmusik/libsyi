@@ -15,3 +15,6 @@ by Steven Yi
 * zdf.udo - Zero Delay Feedback Filters (zdf\_1pole...)
 * gatesig.udo - reads a-rate trigger signal (e.g., from mpulse) and outputs gate signal that holds for given time in seconds
 * seqsig.udo - reads a-rate trigger signal (e.g., from mpulse) and outputs a value from a k-rate array, cycling through the items 
+* clock\_div.udo - reads a-rate trigger signal (e.g., from
+  mpulse) and emits a slower rate trigger determined by the
+  k-rate division value 
