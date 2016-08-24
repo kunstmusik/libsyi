@@ -27,8 +27,12 @@ gkpattern[] fillarray \
 
 gkpattern_bd[] fillarray 1,0,1,0,1,0,1,0 
 ;gkpattern_bd[] fillarray 1,0,0,0,0,1,0,0 
+
+gkpattern_synth[] fillarray \
+  1, 0, 1, 0, 0, 0, 1, 0, \ 
+  1, 0, 1, 0, 1, 0, 1, 0  
   
-gktempo init 120 
+gktempo init 108 
 gkduty init 0.45
 
 gkattack init 0.04
@@ -42,7 +46,7 @@ gkporttime init 0.01
 gaclock init 0
 gkbeat init 0
 
-gkbass_vcf_depth init 8
+gkbass_vcf_depth init 12
 gkbass_vcf_sens init 1 
 
 instr 1
@@ -58,9 +62,6 @@ instr 2 ;; bass line
 
   iamp = ampdbfs(-12)
 
-  ;aretrig = lfo(1.0, 0.8 + kmod)
-  ;aretrig = lfo(1.0, 4.0 + 8.0 *kmod)
-
   aenv adsr140 agate, aretrig, gkattack, gkdecay, gksustain, gkrelease 
 
   apch = seqsig(aclock, gkpattern)
@@ -69,7 +70,10 @@ instr 2 ;; bass line
 
   aout *= 0.5
 
-  aout zdf_ladder aout, 500 * (1 + ((1 - gkbass_vcf_sens) + (aenv * gkbass_vcf_sens)) * gkbass_vcf_depth), a(.96)
+  kcps = (gktempo / 60) / 32 
+  kcut = lfo(0.45, kcps , 1) + 0.5 
+
+  aout zdf_ladder aout, 500 * (1 + ((1 - gkbass_vcf_sens) + (aenv * gkbass_vcf_sens * kcut)) * gkbass_vcf_depth), a(.96)
   /*aout moogladder aout, 500 * (1 + aenv * 2), .6 */
   ;aout lpf18 aout, 400 * (1 + kmod * aenv), .8, 0.4
 
@@ -86,7 +90,6 @@ instr 3 ;; bass vcf mod
 endin
 
 
-
 instr 4 ;; drums
 
   aclock = clock_div(gaclock, 2)
@@ -94,18 +97,18 @@ instr 4 ;; drums
   aretrig init 0
   apch = seqsig(aclock, gkpattern_bd)
 
-  iamp = ampdbfs(-12)
+  iamp = ampdbfs(-18)
 
   aenv adsr140 agate * apch, aretrig, 0.01, 0.25, 0.0001, 0.0001 
   avcoenv adsr140 agate * apch, aretrig, 0.001, 0.05, 0.0001, 0.0001 
 
   ;; good enough for sketching...
   aout = butterlp(
-          reson(vco(iamp, 50 + avcoenv * 200, 3, 0.5, gi_sine), 800, 600),
+          reson(vco(1.0, 50 + avcoenv * 200, 3, 0.5, gi_sine), 800, 600),
           1200)
 
   aout += butterlp(noise(aenv, 0), 300) 
-  aout *= 0.5
+  aout *= 0.25 * iamp
 
   /*aout moogladder aout, 500 * (1 + aenv * 2), .6 */
   ;aout lpf18 aout, 400 * (1 + kmod * aenv), .8, 0.4
@@ -117,6 +120,36 @@ instr 4 ;; drums
 endin
 
 
+instr synth ;; synth line
+
+  /*aclock = clock_div(gaclock, 2)*/
+  aclock = gaclock
+  aretrig init 0
+  kcps = (gktempo / 60) / 16 
+  kcut = lfo(0.4, kcps , 1) + 0.6 
+
+  iamp = ampdbfs(-6)
+
+  agate = gatesig(aclock, 0.05)
+  atrg = seqsig(aclock, gkpattern_synth) 
+  aenv adsr140 agate * atrg, aretrig, 0.001, 0.25, 0.001, 0.25
+
+  apch init cps2pch(10.03, 12)
+  aout = vco(1, apch , 1, 0.5, gi_sine)
+  aout += vco(0.5, apch * 1.5, 2, 0.5, gi_sine)
+  aout += rand:a(0.5)
+
+  aout *= 0.5 * iamp
+
+  aout zdf_ladder aout, (200 * (1 + (kcut * 2))) * (1 + aenv * 8), a(.6)
+
+  aout = aout * aenv 
+
+  al, ar pan2 aout, 0.4
+
+  outc(al, ar)
+
+endin
 
 /*
 
@@ -126,6 +159,7 @@ event_i "i", 1, 0, 1000000
 event_i "i", 2, 0, 1000000
 event_i "i", 3, 0, 1000000
 event_i "i", 4, 0, 1000000
+event_i "i", "synth", 0, 1000000
 
 </CsInstruments>
 ; ==============================================
