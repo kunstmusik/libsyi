@@ -14,6 +14,7 @@ nchnls	=	2
 #include "../seqsig.udo"
 #include "../clock_div.udo"
 #include "../zdf.udo"
+#include "../pattern_sequencer.udo"
 
 
 gi_sine ftgen 0, 0, 65537, 10, 1
@@ -49,12 +50,30 @@ gkbeat init 0
 gkbass_vcf_depth init 12
 gkbass_vcf_sens init 1 
 
-instr 1
+event_i "i", "set_pattern_seq", 0, 1, 0, 0, \ 
+  1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 0 ,0
+
+event_i "i", "set_pattern_seq", 0, 1, 1, 0, \ 
+  1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1 ,0
+
+gkpat_indx init 0
+
+gksong_pattern[] fillarray 0,0,0,1,0,1,0,1
+
+instr sequencer 
   gkbeat = 60 / (gktempo * 4) ;; time in seconds, 1/16 note
   gaclock = mpulse(1, gkbeat)
+
+  apatclock = clock_div(gaclock, 16)
+
+  kpat = seqsig:k(apatclock, gksong_pattern)
+
+  ga1, ga2, ga3, ga4, \
+  ga5, ga6, ga7, ga8 pattern_sequencer gaclock, kpat 
 endin
 
-instr 2 ;; bass line
+
+instr bass ;; bass line
 
   aclock = clock_div(gaclock, 2)
   agate = gatesig(aclock, gkduty * gkbeat * 4)
@@ -65,8 +84,8 @@ instr 2 ;; bass line
   aenv adsr140 agate, aretrig, gkattack, gkdecay, gksustain, gkrelease 
 
   apch = seqsig(aclock, gkpattern)
-  aout = vco(iamp, apch, 1, 0.5, gi_sine)
-  aout += vco(iamp, apch * 0.5, 2, 0.5, gi_sine)
+  aout = vco(1.0, apch, 1, 0.5, gi_sine)
+  aout += vco(1.0, apch * 0.5, 2, 0.5, gi_sine)
 
   aout *= 0.5
 
@@ -77,25 +96,25 @@ instr 2 ;; bass line
   /*aout moogladder aout, 500 * (1 + aenv * 2), .6 */
   ;aout lpf18 aout, 400 * (1 + kmod * aenv), .8, 0.4
 
-  aout = aout * aenv 
+  aout = aout * aenv * iamp
 
   outc(aout, aout)
 
 endin
 
-instr 3 ;; bass vcf mod
+instr bass_vcf_mod ;; bass vcf mod
   kcps = (gktempo / 60) / 8
   gkbass_vcf_sens = lfo(0.4, kcps, 1) + 0.6 
   gkbass_vcf_depth = lfo(0.4, kcps , 1) + 0.6 
 endin
 
 
-instr 4 ;; drums
+instr bass_drum ;; drums
 
   aclock = clock_div(gaclock, 2)
   agate = gatesig(aclock, gkduty * gkbeat * 4)
   aretrig init 0
-  apch = seqsig(aclock, gkpattern_bd)
+  apch = ga1 
 
   iamp = ampdbfs(-18)
 
@@ -108,12 +127,12 @@ instr 4 ;; drums
           1200)
 
   aout += butterlp(noise(aenv, 0), 300) 
-  aout *= 0.25 * iamp
+  aout *= 0.125 * iamp * aenv
 
   /*aout moogladder aout, 500 * (1 + aenv * 2), .6 */
   ;aout lpf18 aout, 400 * (1 + kmod * aenv), .8, 0.4
 
-  aout = aout * aenv 
+  /*aout = aout * aenv */
 
   outc(aout, aout)
 
@@ -151,14 +170,12 @@ instr synth ;; synth line
 
 endin
 
-/*
 
-event_i "i", 1, -1, 1000000
-*/
-event_i "i", 1, 0, 1000000
-event_i "i", 2, 0, 1000000
-event_i "i", 3, 0, 1000000
-event_i "i", 4, 0, 1000000
+;; Events to start always-on modular setup
+event_i "i", "sequencer", 0, 1000000
+event_i "i", "bass", 0, 1000000
+event_i "i", "bass_vcf_mod", 0, 1000000
+event_i "i", "bass_drum", 0, 1000000
 event_i "i", "synth", 0, 1000000
 
 </CsInstruments>
