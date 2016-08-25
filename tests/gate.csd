@@ -50,10 +50,10 @@ gkbeat init 0
 gkbass_vcf_depth init 12
 gkbass_vcf_sens init 1 
 
-event_i "i", "set_pattern_seq", 0, 1, 0, 0, \ 
+set_pattern_seq 0, 0, \ 
   1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 0 ,0
 
-event_i "i", "set_pattern_seq", 0, 1, 1, 0, \ 
+set_pattern_seq 1, 0, \ 
   1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1 ,0
 
 gkpat_indx init 0

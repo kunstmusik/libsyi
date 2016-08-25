@@ -8,8 +8,6 @@
    arrays would be copied every k-pass
    */
   
-;#include "seqsig.udo"
-
 gkpattern_sequencer_all[] init 128 * 8 * 16
 
 opcode patternseq_seqsig, a, akk
@@ -49,7 +47,7 @@ opcode pattern_sequencer, aaaaaaaa, ak
   xout a1, a2, a3, a4, a5, a6, a7, a8
 endop
 
-instr set_pattern_seq
+instr set_pat_seq_instr
   ipatNum = p4
   iseqnum = p5
 
@@ -74,3 +72,12 @@ instr set_pattern_seq
 
   turnoff
 endin
+
+
+opcode set_pattern_seq, 0,iiiiiiiiiiiiiiiiii
+ ipat, iseq, i0, i1, i2, i3, i4, i5 ,i6, i7, \
+ i8, i9, i10, i11, i12, i13, i14, i15 xin
+  event_i "i", "set_pat_seq_instr", 0, 1, \
+   ipat, iseq, i0, i1, i2, i3, i4, i5 ,i6, i7, \
+   i8, i9, i10, i11, i12, i13, i14, i15
+endop
