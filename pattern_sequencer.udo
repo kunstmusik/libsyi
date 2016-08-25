@@ -12,7 +12,7 @@
 
 gkpattern_sequencer_all[] init 128 * 8 * 16
 
-opcode seqsig2, a, akk
+opcode patternseq_seqsig, a, akk
   agate, kstartIndx, klen xin
 
   aout init 0
@@ -37,14 +37,14 @@ opcode pattern_sequencer, aaaaaaaa, ak
 
   kpatstart = kpattern_indx * 128
 
-  a1 seqsig2 atrigger, kpatstart, 16 
-  a2 seqsig2 atrigger, kpatstart + 16, 16 
-  a3 seqsig2 atrigger, kpatstart + 32, 16
-  a4 seqsig2 atrigger, kpatstart + 48, 16
-  a5 seqsig2 atrigger, kpatstart + 64, 16
-  a6 seqsig2 atrigger, kpatstart + 80, 16
-  a7 seqsig2 atrigger, kpatstart + 96, 16
-  a8 seqsig2 atrigger, kpatstart + 112, 16
+  a1 patternseq_seqsig atrigger, kpatstart, 16 
+  a2 patternseq_seqsig atrigger, kpatstart + 16, 16 
+  a3 patternseq_seqsig atrigger, kpatstart + 32, 16
+  a4 patternseq_seqsig atrigger, kpatstart + 48, 16
+  a5 patternseq_seqsig atrigger, kpatstart + 64, 16
+  a6 patternseq_seqsig atrigger, kpatstart + 80, 16
+  a7 patternseq_seqsig atrigger, kpatstart + 96, 16
+  a8 patternseq_seqsig atrigger, kpatstart + 112, 16
 
   xout a1, a2, a3, a4, a5, a6, a7, a8
 endop
