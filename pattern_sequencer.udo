@@ -81,3 +81,43 @@ opcode set_pattern_seq, 0,iiiiiiiiiiiiiiiiii
    ipat, iseq, i0, i1, i2, i3, i4, i5 ,i6, i7, \
    i8, i9, i10, i11, i12, i13, i14, i15
 endop
+
+instr copy_pat_seq_instr
+
+  isrcpat_num = p4
+  isrcseq_num = p5
+  idestpat_num = p6
+  idestseq_num = p7
+
+  indx0 = isrcpat_num * 128 + isrcseq_num * 16 
+  indx1 = idestpat_num * 128 + idestseq_num * 16 
+
+  prints "Copying pattern %d sequence %d\n to pattern %d sequence %d\n", p4, p5, p6, p7
+  gkpattern_sequencer_all[indx1]      = gkpattern_sequencer_all[indx0]     
+  gkpattern_sequencer_all[indx1 + 1]  = gkpattern_sequencer_all[indx0 + 1] 
+  gkpattern_sequencer_all[indx1 + 2]  = gkpattern_sequencer_all[indx0 + 2] 
+  gkpattern_sequencer_all[indx1 + 3]  = gkpattern_sequencer_all[indx0 + 3] 
+  gkpattern_sequencer_all[indx1 + 4]  = gkpattern_sequencer_all[indx0 + 4] 
+  gkpattern_sequencer_all[indx1 + 5]  = gkpattern_sequencer_all[indx0 + 5] 
+  gkpattern_sequencer_all[indx1 + 6]  = gkpattern_sequencer_all[indx0 + 6] 
+  gkpattern_sequencer_all[indx1 + 7]  = gkpattern_sequencer_all[indx0 + 7] 
+  gkpattern_sequencer_all[indx1 + 8]  = gkpattern_sequencer_all[indx0 + 8] 
+  gkpattern_sequencer_all[indx1 + 9]  = gkpattern_sequencer_all[indx0 + 9] 
+  gkpattern_sequencer_all[indx1 + 10] = gkpattern_sequencer_all[indx0 + 10]
+  gkpattern_sequencer_all[indx1 + 11] = gkpattern_sequencer_all[indx0 + 11]
+  gkpattern_sequencer_all[indx1 + 12] = gkpattern_sequencer_all[indx0 + 12]
+  gkpattern_sequencer_all[indx1 + 13] = gkpattern_sequencer_all[indx0 + 13]
+  gkpattern_sequencer_all[indx1 + 14] = gkpattern_sequencer_all[indx1 + 14]
+  gkpattern_sequencer_all[indx1 + 15] = gkpattern_sequencer_all[indx0 + 15]
+
+  turnoff
+endin
+
+/* copies sequence from one pattern to another 
+   Arguments: isrcpat, isrcseq, idestpat, idestseq
+   */
+opcode copy_pattern_seq, 0, iiii
+  ip0, is0, ip1, is1 xin
+  event_i "i", "copy_pat_seq_instr", 0, 1, ip0, is0, ip1, is1
+endop
+

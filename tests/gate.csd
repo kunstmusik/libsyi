@@ -56,6 +56,8 @@ set_pattern_seq 0, 0, \
 set_pattern_seq 1, 0, \ 
   1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 1 ,0
 
+copy_pattern_seq   0,0,2,0
+
 gkpat_indx init 0
 
 gksong_pattern[] fillarray 0,0,0,1,0,1,0,1
@@ -110,16 +112,13 @@ endin
 
 
 instr bass_drum ;; drums
-
-  aclock = clock_div(gaclock, 2)
-  agate = gatesig(aclock, gkduty * gkbeat * 4)
+  agate = gatesig(gaclock, gkduty * gkbeat)
   aretrig init 0
-  apch = ga1 
 
   iamp = ampdbfs(-18)
 
-  aenv adsr140 agate * apch, aretrig, 0.01, 0.25, 0.0001, 0.0001 
-  avcoenv adsr140 agate * apch, aretrig, 0.001, 0.05, 0.0001, 0.0001 
+  aenv adsr140 agate * ga1, aretrig, 0.01, 0.25, 0.0001, 0.0001 
+  avcoenv adsr140 agate * ga1, aretrig, 0.001, 0.15, 0.0001, 0.0001 
 
   ;; good enough for sketching...
   aout = butterlp(
@@ -127,7 +126,7 @@ instr bass_drum ;; drums
           1200)
 
   aout += butterlp(noise(aenv, 0), 300) 
-  aout *= 0.125 * iamp * aenv
+  aout *= 0.05 * iamp * aenv
 
   /*aout moogladder aout, 500 * (1 + aenv * 2), .6 */
   ;aout lpf18 aout, 400 * (1 + kmod * aenv), .8, 0.4
