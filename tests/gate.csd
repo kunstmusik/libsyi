@@ -68,10 +68,10 @@ instr sequencer
 
   apatclock = clock_div(gaclock, 16)
 
-  kpat = seqsig:k(apatclock, gksong_pattern)
+  apat = seqsig(apatclock, gksong_pattern)
 
   ga1, ga2, ga3, ga4, \
-  ga5, ga6, ga7, ga8 pattern_sequencer gaclock, kpat 
+  ga5, ga6, ga7, ga8 pattern_sequencer gaclock, apat 
 endin
 
 

@@ -10,8 +10,8 @@
   
 gkpattern_sequencer_all[] init 128 * 8 * 16
 
-opcode patternseq_seqsig, a, akk
-  agate, kstartIndx, klen xin
+opcode patternseq_seqsig, a, aak
+  agate, astartIndx, klen xin
 
   aout init 0
   kpatindx init 15 
@@ -21,7 +21,7 @@ opcode patternseq_seqsig, a, akk
     if(agate[kindx] == 1) then 
       kpatindx = (kpatindx + 1) % klen 
     endif
-
+    kstartIndx = astartIndx[kindx]
     aout[kindx] = gkpattern_sequencer_all[kstartIndx + kpatindx]
     kindx += 1
   od
@@ -30,19 +30,19 @@ opcode patternseq_seqsig, a, akk
 
 endop
 
-opcode pattern_sequencer, aaaaaaaa, ak
-  atrigger, kpattern_indx xin
+opcode pattern_sequencer, aaaaaaaa, aa
+  atrigger, apattern_indx xin
 
-  kpatstart = kpattern_indx * 128
+  apatstart = apattern_indx * 128
 
-  a1 patternseq_seqsig atrigger, kpatstart, 16 
-  a2 patternseq_seqsig atrigger, kpatstart + 16, 16 
-  a3 patternseq_seqsig atrigger, kpatstart + 32, 16
-  a4 patternseq_seqsig atrigger, kpatstart + 48, 16
-  a5 patternseq_seqsig atrigger, kpatstart + 64, 16
-  a6 patternseq_seqsig atrigger, kpatstart + 80, 16
-  a7 patternseq_seqsig atrigger, kpatstart + 96, 16
-  a8 patternseq_seqsig atrigger, kpatstart + 112, 16
+  a1 patternseq_seqsig atrigger, apatstart, 16 
+  a2 patternseq_seqsig atrigger, apatstart + 16, 16 
+  a3 patternseq_seqsig atrigger, apatstart + 32, 16
+  a4 patternseq_seqsig atrigger, apatstart + 48, 16
+  a5 patternseq_seqsig atrigger, apatstart + 64, 16
+  a6 patternseq_seqsig atrigger, apatstart + 80, 16
+  a7 patternseq_seqsig atrigger, apatstart + 96, 16
+  a8 patternseq_seqsig atrigger, apatstart + 112, 16
 
   xout a1, a2, a3, a4, a5, a6, a7, a8
 endop
