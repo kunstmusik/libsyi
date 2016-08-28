@@ -107,7 +107,7 @@ instr copy_pat_seq_instr
   gkpattern_sequencer_all[indx1 + 11] = gkpattern_sequencer_all[indx0 + 11]
   gkpattern_sequencer_all[indx1 + 12] = gkpattern_sequencer_all[indx0 + 12]
   gkpattern_sequencer_all[indx1 + 13] = gkpattern_sequencer_all[indx0 + 13]
-  gkpattern_sequencer_all[indx1 + 14] = gkpattern_sequencer_all[indx1 + 14]
+  gkpattern_sequencer_all[indx1 + 14] = gkpattern_sequencer_all[indx0 + 14]
   gkpattern_sequencer_all[indx1 + 15] = gkpattern_sequencer_all[indx0 + 15]
 
   turnoff
