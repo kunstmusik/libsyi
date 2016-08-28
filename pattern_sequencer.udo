@@ -121,3 +121,10 @@ opcode copy_pattern_seq, 0, iiii
   event_i "i", "copy_pat_seq_instr", 0, 1, ip0, is0, ip1, is1
 endop
 
+opcode copy_pattern_measure, 0, iiii
+  ip0, is0, ip1, is1 xin
+  event_i "i", "copy_pat_seq_instr", 0, 1, ip0, is0, ip1, is1
+  event_i "i", "copy_pat_seq_instr", 0, 1, ip0 + 1, is0, ip1 + 1, is1
+  event_i "i", "copy_pat_seq_instr", 0, 1, ip0 + 2, is0, ip1 + 2, is1
+  event_i "i", "copy_pat_seq_instr", 0, 1, ip0 + 3, is0, ip1 + 3, is1
+endop
