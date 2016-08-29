@@ -40,9 +40,15 @@ klast_release init -1
 
 if (klast_attack != kattack) then
   klast_attack = kattack
-  kattack_samps = kattack * sr
-  kattack_coef = adsr140_calc_coef(kattack_samps, 0.3)
-  kattack_base = (1.0 + 0.3) * (1 - kattack_coef)
+  if(kattack > 0) then
+    kattack_samps = kattack * sr
+    kattack_coef = adsr140_calc_coef(kattack_samps, 0.3)
+    kattack_base = (1.0 + 0.3) * (1 - kattack_coef)
+  else 
+    kattack_samps = 0 
+    kattack_coef = 0 
+    kattack_base = 0 
+  endif
 endif
 
 if (klast_decay != kdecay) then
@@ -69,13 +75,17 @@ while (kindx < ksmps) do
     klasttrig = kretrig
 
     if (kstate == 0) then
-      kval = kattack_base + (kval * kattack_coef)
-      if(kval >= 1.0) then
+      if(kattack <= 0) then
         kval = 1.0
         kstate = 1
+      else
+        kval = kattack_base + (kval * kattack_coef)
+        if(kval >= 1.0) then
+          kval = 1.0
+          kstate = 1
+        endif
+        asig[kindx] = kval
       endif
-      asig[kindx] = kval
-
     elseif (kstate == 1) then
       kval = kdecay_base + (kval * kdecay_coef)
       if(kval <= ksustain) then
