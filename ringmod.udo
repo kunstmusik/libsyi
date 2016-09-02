@@ -35,20 +35,20 @@ chnset itab, "ringmod.table"
 ihalf = itablen / 2
 
 until (indx >= itablen) do
-iv = (indx - ihalf) / ihalf
-iv = abs(iv)
+  iv = (indx - ihalf) / ihalf
+  iv = abs(iv)
 
 
-if(iv <= i_vb) then
-    tableiw 0, indx, itab, 0, 0, 2
-elseif(iv <= i_vl) then
-    ival = i_h * ( ((iv - i_vb)^2) / i_vl_vb_denom)
-    tableiw ival, indx, itab, 0, 0, 2
-else
-    ival = (i_h * iv) - i_h_vl + i_vl_add
-    tableiw ival, indx, itab, 0, 0, 2
-endif
-indx += 1
+  if(iv <= i_vb) then
+      tableiw 0, indx, itab, 0, 0, 2
+  elseif(iv <= i_vl) then
+      ival = i_h * ( ((iv - i_vb)^2) / i_vl_vb_denom)
+      tableiw ival, indx, itab, 0, 0, 2
+  else
+      ival = (i_h * iv) - i_h_vl + i_vl_add
+      tableiw ival, indx, itab, 0, 0, 2
+  endif
+  indx += 1
 od
 
 endif
@@ -59,11 +59,11 @@ acar2 = acarrier + ain1
 ain2 = acarrier - ain1
 
 asig1 table3 acar2, itab, 1, 0.5
-asig2 table3 acar2 * -1, itab, 1, 0.5
+asig2 table3 -acar2, itab, 1, 0.5
 asig3 table3 ain2, itab, 1, 0.5
-asig4 table3 ain2 * -1, itab, 1, 0.5
+asig4 table3 -ain2, itab, 1, 0.5
 
-asiginv = (asig3 + asig4) * -1
+asiginv = -(asig3 + asig4)
 
 aout sum asig1, asig2, asiginv
 
