@@ -331,16 +331,15 @@ opcode zdf_ladder, a, akk
   kwa = (2/iT) * tan(kwd * iT/2) 
   kg  = kwa * iT/2 
 
-  kk = 4.0*(kQ - 0.707)/(25.0 - 0.707)
+  kk = 4.0*(kQ - 0.5)/(25.0 - 0.5)
 
-  kg_2 = kg * kg
-  kg_3 = kg_2 * kg
+  kg_plus_1 = (1.0 + kg)
 
-  ; big combined value
-  ; for overall filter
-  kG  = kg_2 * kg_2  
-  ; for individual 1-poles
-  kG_pole = kg/(1.0 + kg)
+  kG = kg / kg_plus_1 
+
+  kG_2 = kG * kG
+  kG_3 = kG_2 * kG
+  kGAMMA = kG_2 * kG_2
 
   ;; state for each 1-pole's integrator 
   kz1 init 0
@@ -353,26 +352,31 @@ opcode zdf_ladder, a, akk
     ;; processing
     kin = ain[kindx]
 
-    kS = kg_3 * kz1 + kg_2 * kz2 + kg * kz3 + kz4
-    ku = (kin - kk *  kS) / (1 + kk * kG)
+    kS1 = (kz1 / kg_plus_1)
+    kS2 = (kz2 / kg_plus_1)
+    kS3 = (kz3 / kg_plus_1)
+    kS4 = (kz4 / kg_plus_1)
+
+    kS = kG_3 * kS1  + kG_2 * kS2 + kG * kS3 + kS4 
+    ku = (kin - kk *  kS) / (1 + kk * kGAMMA)
 
     ;; 1st stage
-    kv = (ku - kz1) * kG_pole 
+    kv = (ku - kz1) * kG
     klp = kv + kz1
     kz1 = klp + kv
 
     ;; 2nd stage
-    kv = (klp - kz2) * kG_pole 
+    kv = (klp - kz2) * kG
     klp = kv + kz2
     kz2 = klp + kv
 
     ;; 3rd stage
-    kv = (klp - kz3) * kG_pole 
+    kv = (klp - kz3) * kG 
     klp = kv + kz3
     kz3 = klp + kv
 
     ;; 4th stage
-    kv = (klp - kz4) * kG_pole 
+    kv = (klp - kz4) * kG 
     klp = kv + kz4
     kz4 = klp + kv
 
@@ -409,40 +413,47 @@ opcode zdf_ladder, a, aaa
     kwa = (2/iT) * tan(kwd * iT/2) 
     kg  = kwa * iT/2 
 
-    kk = 4.0*(kQ - 0.707)/(25.0 - 0.707)
+    kk = 4.0*(kQ - 0.5)/(25.0 - 0.5)
 
-    kg_2 = kg * kg
-    kg_3 = kg_2 * kg
+    kg_plus_1 = (1.0 + kg)
 
-    ; big combined value
-    ; for overall filter
-    kG  = kg_2 * kg_2  
+    kG = kg / kg_plus_1 
+
+    kG_2 = kG * kG
+    kG_3 = kG_2 * kG
+    kGAMMA = kG_2 * kG_2
+
     ; for individual 1-poles
-    kG_pole = kg/(1.0 + kg)
 
     ;; processing
     kin = ain[kindx]
 
-    kS = kg_3 * kz1 + kg_2 * kz2 + kg * kz3 + kz4
-    ku = (kin - kk *  kS) / (1 + kk * kG)
+    kS1 = (kz1 / kg_plus_1)
+    kS2 = (kz2 / kg_plus_1)
+    kS3 = (kz3 / kg_plus_1)
+    kS4 = (kz4 / kg_plus_1)
+
+
+    kS = kG_3 * kS1  + kG_2 * kS2 + kG * kS3 + kS4 
+    ku = (kin - kk *  kS) / (1 + kk * kGAMMA)
 
     ;; 1st stage
-    kv = (ku - kz1) * kG_pole 
+    kv = (ku - kz1) * kG
     klp = kv + kz1
     kz1 = klp + kv
 
     ;; 2nd stage
-    kv = (klp - kz2) * kG_pole 
+    kv = (klp - kz2) * kG
     klp = kv + kz2
     kz2 = klp + kv
 
     ;; 3rd stage
-    kv = (klp - kz3) * kG_pole 
+    kv = (klp - kz3) * kG 
     klp = kv + kz3
     kz3 = klp + kv
 
     ;; 4th stage
-    kv = (klp - kz4) * kG_pole 
+    kv = (klp - kz4) * kG 
     klp = kv + kz4
     kz4 = klp + kv
 

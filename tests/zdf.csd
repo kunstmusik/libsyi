@@ -129,11 +129,13 @@ ipch = cps2pch(p4, 12)
 
 asig = vco2(iamp, ipch) 
 
-kcut = expon(ipch * 8, p3, ipch * 2)
+kcut = expon(20000, p3, ipch * 2)
 
 aout = zdf_ladder(asig, kcut, 1.0)
 
 aout = limit(aout, -1.0, 1.0)
+
+aout *= adsr(0.02, 0, 1, 0.02)
 
 outc(aout, aout)
 
