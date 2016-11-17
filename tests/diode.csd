@@ -1,5 +1,5 @@
 ;
-; "Zero-Delay Feedback Filters Test file"
+; "Diode Ladder Filter Test file"
 ; by Steven Yi 
 ;
 <CsoundSynthesizer>

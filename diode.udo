@@ -11,11 +11,14 @@
 
 ;; ARGS
 ;; ain - signal to filter
-;; acf/kcf - cutoff frequency (unstable above 10k or so)
+;; acf/kcf - cutoff frequency 
 ;; ak/kk  - k-value that controls resonance, range 0-16 is safe
 ;; knlp - use non-linear processing: 
-;;        0 - none, 1 - normalized, 2 - non-normalized 
+;;        0 - none 
+;;        1 - normalized (outputs to range +-1.0)
+;;        2 - non-normalized (less expensive than normalized, range +-0.8)
 ;; ksaturation - saturation amount for non-linear processing 
+;;        (default: 1.0, greater values lead to higher saturation)
 
 
 opcode diode_ladder, a, akkOP
