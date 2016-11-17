@@ -12,7 +12,7 @@
 ;; ARGS
 ;; ain - signal to filter
 ;; acf/kcf - cutoff frequency 
-;; ak/kk  - k-value that controls resonance, range 0-16 is safe
+;; ak/kk  - k-value that controls resonance, self-resonance occurs at k=17;
 ;; knlp - use non-linear processing: 
 ;;        0 - none 
 ;;        1 - normalized (outputs to range +-1.0)
