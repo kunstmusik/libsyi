@@ -11,37 +11,34 @@ nchnls=2
 0dbfs=1
 
 #include "../diode.udo"
-#include "../zdf.udo"
 
-gkcut init 4000
+gi_sine ftgen 0, 0, 65537, 10, 1
+
+gkcut init 6000
+
 
 instr modulation 
   gkcut = lfo(4000, 0.1) + 6000 
 endin
 
-	instr bass	 
+instr bass	 
 
-iamp = ampdbfs(-12) 
-ipch = cps2pch(p4, 12)
+  iamp = ampdbfs(-12) 
+  ipch = cps2pch(p4, 12)
 
-asig = vco2(0.5, ipch, 0)
+  asig = vco2(0.5, ipch, 0)
 
-/*kcut = expon:k(8000, p3, 800) */
-/*aout diode_ladder asig, kcut, 16 */
+  acut = expon:a(i(gkcut), p3, 200) 
+  /*aout = diode_ladder(asig, acut, a(6 + (i(gkcut) / 1000)), 1, 4)*/
+  aout = diode_ladder(asig, acut, a(10), 1, 4)
 
-/*print i(gkcut)*/
+  aout *= expseg(1.0, p3 - 0.05, 1.0, 0.05, 0.001) 
 
-acut = expon:a(i(gkcut), p3, 100) 
-aout = diode_ladder(asig, acut, a(i(gkcut) / 600), 1, 4)
-/*aout = diode_ladder(asig, acut, a(16), 1, 4)*/
+  aout = limit(aout, -1.0, 1.0)
 
-aout *= adsr(0.02, 0.01, 1.0, 0.02)
+  outc(aout, aout)
 
-aout = limit(aout, -1.0, 1.0)
-
-outc(aout, aout)
-
-	endin
+endin
 
 
 gipat[] init 8

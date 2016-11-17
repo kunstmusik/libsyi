@@ -50,7 +50,6 @@ opcode diode_ladder, a, akkOP
   kdelta1 init 0
   kdelta2 init 0
   kdelta3 init 0
-  kdelta4 init 0
 
   kepsilon1 init 0
   kepsilon2 init 0
@@ -90,7 +89,7 @@ opcode diode_ladder, a, akkOP
     kbeta1 = 1.0 / (1.0 + kg - kg * kG2)
     kbeta2 = 1.0 / (1.0 + kg - 0.5 * kg * kG3)
     kbeta3 = 1.0 / (1.0 + kg - 0.5 * kg * kG4)
-    kbeta4 = kalpha 
+    kbeta4 = 1.0 / (1.0 + kg) 
 
     kgamma1 = 1.0 + kG1 * kG2
     kgamma2 = 1.0 + kG2 * kG3
@@ -99,7 +98,6 @@ opcode diode_ladder, a, akkOP
     kdelta1 = kg
     kdelta2 = 0.5 * kg
     kdelta3 = 0.5 * kg
-    kdelta4 = 0.0 
 
     kepsilon1 = kG2
     kepsilon2 = kG3
@@ -130,7 +128,7 @@ opcode diode_ladder, a, akkOP
     kSIGMA = kSG1 * kfbo1 +
              kSG2 * kfbo2 +
              kSG3 * kfbo3 +
-             kSG4 * kfb4 
+             kSG4 * kfbo4 
 
     ;; non-linear processing
     if (knlp == 1) then
@@ -207,7 +205,6 @@ opcode diode_ladder, a, aaaOP
   kdelta1 init 0
   kdelta2 init 0
   kdelta3 init 0
-  kdelta4 init 0
 
   kepsilon1 init 0
   kepsilon2 init 0
@@ -255,7 +252,7 @@ opcode diode_ladder, a, aaaOP
       kbeta1 = 1.0 / (1.0 + kg - kg * kG2)
       kbeta2 = 1.0 / (1.0 + kg - 0.5 * kg * kG3)
       kbeta3 = 1.0 / (1.0 + kg - 0.5 * kg * kG4)
-      kbeta4 = kalpha 
+      kbeta4 = 1.0 / (1.0 + kg) 
 
       kgamma1 = 1.0 + kG1 * kG2
       kgamma2 = 1.0 + kG2 * kG3
@@ -264,7 +261,6 @@ opcode diode_ladder, a, aaaOP
       kdelta1 = kg
       kdelta2 = 0.5 * kg
       kdelta3 = 0.5 * kg
-      kdelta4 = 0.0 
 
       kepsilon1 = kG2
       kepsilon2 = kG3
