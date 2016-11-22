@@ -52,5 +52,5 @@ opcode solina_chorus, a, akkkk
   a2 vdelay3 aLeft, at2, imax 
   a3 vdelay3 aLeft, at3, imax 
 
-xout (a1 + a2 + a3) / 3
+  xout (a1 + a2 + a3) / 3
 endop
