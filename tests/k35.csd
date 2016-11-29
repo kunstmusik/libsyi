@@ -68,7 +68,7 @@ instr ms20_drum
   aenv = expseg(20000, 0.05, ipch, p3 - .05, ipch)
 
   asig = rand(1.0)
-  asig = k35_hpf(asig, 1000, 7, 0, 1)
+  asig = k35_hpf(asig, 100, 7, 0, 1)
   asig = k35_lpf(asig, aenv, 9.8, 0, 1)
 
   asig = tanh(asig * 16)
