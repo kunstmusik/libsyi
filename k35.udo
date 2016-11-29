@@ -90,7 +90,7 @@ opcode k35_lpf, a, akkkk
 
     kS35 = (klpf2_beta * kz2) + (khpf1_beta * kz3)
 
-    kout = (kK > 0) ? (ky * (1.0 / kK)) : ky 
+    kout = (kK > 0) ? (ky / kK) : ky 
 
     aout[kindx] = kout
 
@@ -179,7 +179,7 @@ opcode k35_lpf, a, aakkk
 
     kS35 = (klpf2_beta * kz2) + (khpf1_beta * kz3)
 
-    kout = (kK > 0) ? (ky * (1.0 / kK)) : ky 
+    kout = (kK > 0) ? (ky / kK) : ky 
 
     aout[kindx] = kout
 
@@ -196,7 +196,7 @@ endop
 ;; 
 ;; Based on code by Will Pirkle, presented in:
 ;; 
-;; http://www.willpirkle.com/Downloads/AN-5Korg35_V3.pdf
+;; http://www.willpirkle.com/Downloads/AN-7Korg35HPF_V2.pdf 
 ;; 
 ;; [ARGS]
 ;; 
@@ -264,7 +264,7 @@ opcode k35_hpf, a, akkkk
     kz1 = klp1 + kv1
     ky1 = ksig - klp1
    
-    ku = (kalpha * ky1) + kS35
+    ku = kalpha * (ky1 + kS35)
     ky = kK * ku
 
     if (knonlinear == 1) then
@@ -284,7 +284,7 @@ opcode k35_hpf, a, akkkk
 
     kS35 = (khpf2_beta * kz2) + (klpf1_beta * kz3)
 
-    kout = (kK > 0) ? (ky * (1.0 / kK)) : ky 
+    kout = (kK > 0) ? (ky / kK) : ky 
 
     aout[kindx] = kout
 
@@ -353,7 +353,7 @@ opcode k35_hpf, a, aakkk
     kz1 = klp1 + kv1
     ky1 = ksig - klp1
    
-    ku = (kalpha * ky1) + kS35
+    ku = kalpha * (ky1 + kS35)
     ky = kK * ku
 
     if (knonlinear == 1) then
@@ -373,7 +373,7 @@ opcode k35_hpf, a, aakkk
 
     kS35 = (khpf2_beta * kz2) + (klpf1_beta * kz3)
 
-    kout = (kK > 0) ? (ky * (1.0 / kK)) : ky 
+    kout = (kK > 0) ? (ky / kK) : ky 
 
     aout[kindx] = kout
 

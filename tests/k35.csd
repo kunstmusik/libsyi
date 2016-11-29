@@ -11,6 +11,8 @@ nchnls	=	2
 
 #include "../k35.udo"
 
+;; test instruments to demo filter cutoff sweep with high resonance
+
 instr 1	
 
 asig = vco2(0.5, cps2pch(6.00, 12))
@@ -57,44 +59,86 @@ outc(asig, asig)
 
 endin
 
+;; beat instruments
+
 instr ms20_drum
 
-ipch = cps2pch(p4, 12)
-iamp = ampdbfs(p5)
-aenv = expseg(20000, 0.05, ipch, p3 - .05, ipch)
+  ipch = cps2pch(p4, 12)
+  iamp = ampdbfs(p5)
+  aenv = expseg(20000, 0.05, ipch, p3 - .05, ipch)
 
-asig = rand(1.0)
-asig = k35_hpf(asig, 1000, 7, 0, 1)
-asig = k35_lpf(asig, aenv, 9.8, 0, 1)
+  asig = rand(1.0)
+  asig = k35_hpf(asig, 1000, 7, 0, 1)
+  asig = k35_lpf(asig, aenv, 9.8, 0, 1)
 
-asig = tanh(asig * 8)
+  asig = tanh(asig * 16)
 
-asig *= expon(iamp, p3, 0.0001)
+  asig *= expon(iamp, p3, 0.0001)
 
-outc(asig, asig)
+  outc(asig, asig)
 
 endin
 
-gktempo = 122
+instr ms20_bass 
+  ipch = cps2pch(p4, 12)
+  iamp = ampdbfs(p5)
+  aenv = expseg(1000, 0.1, ipch * 2, p3 - .05, ipch * 2)
 
-instr drums
-  istep = p4 
+  asig = vco2(1.0, ipch)
+  asig = k35_hpf(asig, ipch, 5, 0, 1)
+  asig = k35_lpf(asig, aenv, 8, 0, 1)
+
+  asig *= expon(iamp, p3, 0.0001) * 0.8
+
+  outc(asig, asig)
+endin
+
+;; perf code
+
+gktempo init 122
+
+opcode beat_dur,i,0
+  xout 60 / i(gktempo) 
+endop
+
+instr bass_player
+  idur = beat_dur() / int(random(1,3)) 
+  ipch = 6.00 + int(random(1,3)) + int(random(1,3)) / 100
+
+  schedule("ms20_bass", 0, idur, ipch, -11) 
+
+  schedule("bass_player", idur, 0.1)
+endin
+
+instr beat_player 
+  istep_total = p4 
+  istep = istep_total % 16
 
   if(istep % 4 == 0) then
-    schedule("ms20_drum", 0, 0.5, 4.00, -12)
+    ipch = ((istep_total % 128) < 112) ? 4.00 : 8.00
+    iamp = (istep == 0)  ? -9 : -12
+    schedule("ms20_drum", 0, 0.5, ipch, iamp)
   endif
 
   schedule("ms20_drum", 0, 0.125, 14.00, 
            (istep % 4 == 0) ? -12 : -18)
 
   if(istep == 4 || istep == 14) then
-    schedule("ms20_drum", 0, 0.25, 11.00, -12)
+    schedule("ms20_drum", 0, 0.35, 10.00, -12)
   elseif (istep == 6 || istep == 12) then
-    schedule("ms20_drum", 0, 0.25, 11.06, -12)
+    schedule("ms20_drum", 0, 0.35, 10.06, -12)
   endif
 
-  schedule("drums", 60 / (112 * 4), 0.1, (istep + 1) % 16)
+  schedule("beat_player", beat_dur() / 4, 0.1, istep_total + 1)
 endin
+
+;; start play of beats
+
+instr start_beats
+  schedule("beat_player", 0, 0.1, 0)
+  schedule("bass_player", 0, 0.1)
+endin
+
 
 </CsInstruments>
 ; ==============================================
@@ -104,36 +148,8 @@ i2 5 5.0
 i3 10 5.0
 i4 15 5.0
 
-i "drums" 20 0.5 0
+i "start_beats" 22 0.5 0
 f0 3600
-
-/*i"ms20_drum" 20 0.5 4.00 -12*/
-/*i"ms20_drum" + 0.5 4.00 -12*/
-/*i"ms20_drum" + 0.5 4.00 -12*/
-/*i"ms20_drum" + 0.5 4.00 -12*/
-
-/*i"ms20_drum" 20 0.125 14.00 -12*/
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-/*i"ms20_drum" + . . . */
-
-
-/*i"ms20_drum" 20.5 0.25 11.00 -12*/
-/*i"ms20_drum" + .  11.06 .*/
-/*i"ms20_drum" 21.5 0.25 11.06 -12*/
-/*i"ms20_drum" + .  11.00 .*/
 
 </CsScore>
 </CsoundSynthesizer>
