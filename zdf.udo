@@ -322,7 +322,7 @@ opcode zdf_ladder, a, akk
   ain, kcf, kres     xin
   aout init 0
 
-  kR = limit(kres, 0.0, 1.0) * 0.95
+  kR = limit(kres, 0.0, 1.0) * 0.98
 
   kQ = 1 / (2 * (1 - kR)) 
 
@@ -405,7 +405,7 @@ opcode zdf_ladder, a, aaa
   kindx = 0
   while kindx < ksmps do
 
-    kR = limit(ares[kindx], 0.0, 1.0) * 0.95
+    kR = limit(ares[kindx], 0.0, 1.0) * 0.98
 
     kQ = 1 / (2 * (1 - kR)) 
 
