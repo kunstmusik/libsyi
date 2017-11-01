@@ -38,80 +38,85 @@ gkporttime init 0.01
 gaclock init 0
 gkbeat init 0
 
-;; PATTERN SEQUENCES
-;; BD 
 
-set_pattern_seq 0, 0, \ 
-  1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 1, 1 ,1
+instr Init
 
-set_pattern_seq 1, 0, \ 
-  1, 1, 1 ,1, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 0 ,0
+  ;; PATTERN SEQUENCES
+  ;; BD 
 
-set_pattern_seq 2, 0, \ 
-  1, 0, 0 ,0, 1, 0, 0, 0, 1, 1, 1 ,1, 1, 1, 1 ,1
+  set_pattern_seq 0, 0, \ 
+    1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 1, 1 ,1
 
-set_pattern_seq 3, 0, \ 
-  1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 0 ,0
+  set_pattern_seq 1, 0, \ 
+    1, 1, 1 ,1, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 0 ,0
 
-copy_pattern_seq 2,0, 4,0
-copy_pattern_seq 3,0, 5,0
-copy_pattern_seq 2,0, 6,0
-copy_pattern_seq 3,0, 7,0
+  set_pattern_seq 2, 0, \ 
+    1, 0, 0 ,0, 1, 0, 0, 0, 1, 1, 1 ,1, 1, 1, 1 ,1
+
+  set_pattern_seq 3, 0, \ 
+    1, 0, 0 ,0, 1, 0, 0, 0, 1, 0, 0 ,0, 1, 0, 0 ,0
+
+  copy_pattern_seq 2,0, 4,0
+  copy_pattern_seq 3,0, 5,0
+  copy_pattern_seq 2,0, 6,0
+  copy_pattern_seq 3,0, 7,0
 
 
-copy_pattern_seq 3,0, 8,0
-copy_pattern_seq 3,0, 9,0
-copy_pattern_seq 3,0, 10,0
-copy_pattern_seq 3,0, 11,0
+  copy_pattern_seq 3,0, 8,0
+  copy_pattern_seq 3,0, 9,0
+  copy_pattern_seq 3,0, 10,0
+  copy_pattern_seq 3,0, 11,0
 
-copy_pattern_measure 8,0, 12,0
+  copy_pattern_measure 8,0, 12,0
 
-;; CLAP 
-set_pattern_seq 8, 2, \ 
-  0, 0, 0 ,0, 1, 0, 0, 0, 0, 0, 0 ,0, 1, 0, 0 ,0
+  ;; CLAP 
+  set_pattern_seq 8, 2, \ 
+    0, 0, 0 ,0, 1, 0, 0, 0, 0, 0, 0 ,0, 1, 0, 0 ,0
 
-copy_pattern_seq 8,2, 9,2
-copy_pattern_seq 8,2, 10,2
-copy_pattern_seq 8,2, 11,2
+  copy_pattern_seq 8,2, 9,2
+  copy_pattern_seq 8,2, 10,2
+  copy_pattern_seq 8,2, 11,2
 
-;; BASS
+  ;; BASS
 
-gibpchf = cps2pch(6.05,12)
-gibpchc = cps2pch(6.00,12)
-gibpchd = cps2pch(6.02,12)
-gibpchg = cps2pch(6.07,12)
-gibpchf2 = gibpchf * 2 
-gibpchc2 = gibpchc * 2 
-gibpchd2 = gibpchd * 2 
-gibpchg2 = gibpchg * 2 
+  gibpchf = cps2pch(6.05,12)
+  gibpchc = cps2pch(6.00,12)
+  gibpchd = cps2pch(6.02,12)
+  gibpchg = cps2pch(6.07,12)
+  gibpchf2 = gibpchf * 2 
+  gibpchc2 = gibpchc * 2 
+  gibpchd2 = gibpchd * 2 
+  gibpchg2 = gibpchg * 2 
 
-set_pattern_seq 4, 1, 
-  gibpchf, 0, 0, 0, gibpchf, 0, 0, 0,
-  gibpchc, 0, 0, 0, gibpchc, 0, 0, 0
+  set_pattern_seq 4, 1, 
+    gibpchf, 0, 0, 0, gibpchf, 0, 0, 0,
+    gibpchc, 0, 0, 0, gibpchc, 0, 0, 0
 
-set_pattern_seq 5, 1, 
-  gibpchd, 0, 0, 0, gibpchd, 0, 0, 0,
-  gibpchd, 0, 0, 0, gibpchd, 0, 0, 0
+  set_pattern_seq 5, 1, 
+    gibpchd, 0, 0, 0, gibpchd, 0, 0, 0,
+    gibpchd, 0, 0, 0, gibpchd, 0, 0, 0
 
-set_pattern_seq 6, 1, 
-  gibpchf, 0, 0, 0, gibpchf, 0, 0, 0, 
-  gibpchg, 0, 0, 0, gibpchg, 0, 0, 0 
+  set_pattern_seq 6, 1, 
+    gibpchf, 0, 0, 0, gibpchf, 0, 0, 0, 
+    gibpchg, 0, 0, 0, gibpchg, 0, 0, 0 
 
-copy_pattern_seq   5,1,7,1
+  copy_pattern_seq   5,1,7,1
 
-set_pattern_seq 8, 1, 
-  gibpchf, 0, gibpchf2, 0, gibpchf, 0, gibpchf2, 0,
-  gibpchc, 0, gibpchc2, 0, gibpchc, 0, gibpchc2, 0
+  set_pattern_seq 8, 1, 
+    gibpchf, 0, gibpchf2, 0, gibpchf, 0, gibpchf2, 0,
+    gibpchc, 0, gibpchc2, 0, gibpchc, 0, gibpchc2, 0
 
-set_pattern_seq 9, 1, 
-  gibpchd, 0, gibpchd2, 0, gibpchd, 0, gibpchd2, 0,
-  gibpchd, 0, gibpchd2, 0, gibpchd, 0, gibpchd2, 0
+  set_pattern_seq 9, 1, 
+    gibpchd, 0, gibpchd2, 0, gibpchd, 0, gibpchd2, 0,
+    gibpchd, 0, gibpchd2, 0, gibpchd, 0, gibpchd2, 0
 
-set_pattern_seq 10, 1, 
-  gibpchf, 0, gibpchf2, 0, gibpchf, 0, gibpchf2, 0,
-  gibpchg, 0, gibpchg2, 0, gibpchg, 0, gibpchg2, 0 
+  set_pattern_seq 10, 1, 
+    gibpchf, 0, gibpchf2, 0, gibpchf, 0, gibpchf2, 0,
+    gibpchg, 0, gibpchg2, 0, gibpchg, 0, gibpchg2, 0 
 
-copy_pattern_seq   9,1,11,1
+  copy_pattern_seq   9,1,11,1
+
+endin
 
 gkpat_indx init 0
 
@@ -256,6 +261,7 @@ instr synth ;; synth line
 
 endin
 
+schedule("Init", 0, 0.1)
 
 ;; Events to start always-on modular setup
 event_i "i", "sequencer", 0, 1000000
