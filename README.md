@@ -16,8 +16,6 @@ by Steven Yi
 * audaciouseq.udo - Implementation of a 10-band EQ filter based on code from
   Audacious Media Player
 * solina.udo - Chorus effect based on chorus module of Solina String Ensemble 
-* zdf\_svf.udo - Zero Delay State Variable Filter 
-* zdf.udo - Zero Delay Feedback Filters (zdf\_1pole...)
 * gatesig.udo - reads a-rate trigger signal (e.g., from mpulse) and outputs
   gate signal that holds for given time in seconds
 * seqsig.udo - reads a-rate trigger signal (e.g., from mpulse) and outputs a
@@ -27,3 +25,16 @@ by Steven Yi
 * pattern\_sequencer.udo - 128 pattern sequencer with 8 sequences per pattern,
   inspired by the Doepfer Schaltwerk; contains additional utility opcodes for
   creating and manipulating patterns and sequences 
+* shimmer\_reverb.udo - stereo effect with reverb and spectrally processed
+  pitch-shifted feedback
+
+
+## Deprecated
+
+These have been converted to C and added to core Csound. These files are left
+here if anyone is interested to study the user-defined code versions.
+
+* k35.udo - low-pass and high-pass filters based on Korg 35 module
+  (found in MS-10 and MS-20) 
+* zdf\_svf.udo - Zero Delay State Variable Filter 
+* zdf.udo - Zero Delay Feedback Filters (zdf\_1pole...)
