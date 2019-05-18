@@ -12,7 +12,7 @@ http://research.spa.aalto.fi/publications/papers/smc17-wavefolder/
 ; ==============================================
 <CsInstruments>
 
-sr	=	48000
+sr	= 88200 ;; as mentioned in paper to get around aliasing	
 ksmps	= 64	
 nchnls	=	2
 0dbfs	=	1
@@ -21,7 +21,10 @@ nchnls	=	2
 
 instr WaveFolderTest	
   igain = p6  
+  idcoffset = p7
   asig = oscili(igain, p4)
+
+  asig += idcoffset
 
   asig *= 0.333
 
@@ -46,7 +49,10 @@ instr TestMelody
   ipercent = ival / 5
   igain = (ipercent * 20) + 0.5
 
-  schedule("WaveFolderTest", 0, p3, cpsmidinn(30 +  imelody[p4]), ampdbfs(-6), igain)
+  
+  idcoffset = ((times() % 50) / 50) * 0.5
+
+  schedule("WaveFolderTest", 0, p3, cpsmidinn(30 +  imelody[p4]), ampdbfs(-6), igain, idcoffset)
   schedule(p1, p3, p3, (p4 + 1) % 8)
 endin
 
