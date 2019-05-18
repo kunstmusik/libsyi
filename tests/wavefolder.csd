@@ -7,7 +7,7 @@ http://research.spa.aalto.fi/publications/papers/smc17-wavefolder/
 
 <CsoundSynthesizer>
 <CsOptions>
--o dac --port=10000
+-o dac 
 </CsOptions>
 ; ==============================================
 <CsInstruments>
@@ -53,14 +53,16 @@ instr TestMelody
   idcoffset = ((times() % 50) / 50) * 0.5
 
   schedule("WaveFolderTest", 0, p3, cpsmidinn(30 +  imelody[p4]), ampdbfs(-6), igain, idcoffset)
-  schedule(p1, p3, p3, (p4 + 1) % 8)
+  if(times() < 50) then
+    schedule(p1, p3, p3, (p4 + 1) % 8)
+  endif
 endin
 
 schedule("TestMelody", 0, 0.10, 0)
 
 </CsInstruments>
 <CsScore>
-f0 3600
+f 0 50
 </CsScore>
 </CsoundSynthesizer>
 
