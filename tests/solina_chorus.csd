@@ -36,6 +36,7 @@ instr Mix_Dry
   aR chnget "sigR"
 
   outc aL, aR
+  chnclear "sigL", "sigR"
 
 endin
 
@@ -49,6 +50,7 @@ instr Mix_Chorus
   aR solina_chorus aR, 0.18, 0.6, 6, 0.2
 
   outc aL, aR
+  chnclear "sigL", "sigR"
 
 endin
 
@@ -64,6 +66,8 @@ instr Mix_Chorus_Reverb
 
   aL ntrpol aL, arvbL, 0.8
   aR ntrpol aR, arvbR, 0.8
+
+  chnclear "sigL", "sigR"
 
 outc aL, aR
 
