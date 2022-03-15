@@ -25,9 +25,9 @@ opcode sol_lfo_3, aaa, kk
 
   aphs phasor kfreq
 
-  a0   = tablei(aphs, gi_solina_parabola, 1, 0, 1)
-  a120 = tablei(aphs, gi_solina_parabola, 1, 0.333, 1)
-  a240 = tablei(aphs, gi_solina_parabola, 1, -0.333, 1)
+  a0   tablei aphs, gi_solina_parabola, 1, 0, 1
+  a120 tablei aphs, gi_solina_parabola, 1, 0.333, 1
+  a240 tablei aphs, gi_solina_parabola, 1, -0.333, 1
 
   xout (a0 * kamp), (a120 * kamp), (a240 * kamp)
 endop

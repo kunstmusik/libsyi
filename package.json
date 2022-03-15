@@ -1,0 +1,14 @@
+{
+  "name": "@kunstmusik/libsyi",
+  "version": "1.0.0",
+  "description": "Csound user-defined opcode (UDO) library",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kunstmusik/libsyi.git"
+  },
+  "author": "Steven Yi <stevenyi@gmail.com>",
+  "license": "MIT",
+  "homepage" : "https://github.com/kunstmusik/libsyi",
+  "keywords" : ["csound"] 
+}
